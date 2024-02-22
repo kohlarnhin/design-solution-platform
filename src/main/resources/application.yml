@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.17.15.143:3306/my_test_db
+    username: root
+    password: 160624zjy
+  # redis的配置
+  data:
+    redis:
+      host: 172.17.15.143
+      port: 6379
+      database: 0
+
+
+redisson:
+  address: 172.17.15.143:6379
+  database: 1
