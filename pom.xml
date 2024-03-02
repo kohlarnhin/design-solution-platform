@@ -17,6 +17,7 @@
     <modules>
         <module>sso-demo</module>
         <module>design-patterns</module>
+        <module>redis-lock</module>
     </modules>
     <properties>
         <java.version>21</java.version>
