@@ -3,8 +3,6 @@ server:
 spring:
   application:
     name: koh-user
-  profiles:
-    active: dev
   cloud:
     kubernetes:
       config:
