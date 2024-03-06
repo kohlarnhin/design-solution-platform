@@ -1,0 +1,14 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: koh-user
+  profiles:
+    active: test
+  cloud:
+    kubernetes:
+      config:
+        name: koh-user-config
+        namespace: koh-cloud
+        enabled: true
+

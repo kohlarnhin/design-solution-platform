@@ -12,6 +12,7 @@
         <module>sso-demo</module>
         <module>design-patterns</module>
         <module>redis-lock</module>
+        <module>spring-cloud-k8s</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -123,4 +124,19 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <plugins>
+            <!-- 编译插件配置 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <parameters>true</parameters>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
