@@ -22,7 +22,7 @@ spec:
         app: koh-user
     spec:
       containers:
-        - image: $REGISTRY/$ALIYUNHUB_NAMESPACE/manage-gateway:SNAPSHOT-$BUILD_NUMBER
+        - image: kohlarnhin/koh-user:latest
           imagePullPolicy: Always
           name: app
           ports:

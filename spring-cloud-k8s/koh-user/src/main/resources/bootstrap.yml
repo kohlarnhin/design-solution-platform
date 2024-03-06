@@ -4,7 +4,7 @@ spring:
   application:
     name: koh-user
   profiles:
-    active: test
+    active: dev
   cloud:
     kubernetes:
       config:
