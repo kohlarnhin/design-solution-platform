@@ -9,6 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <packaging>pom</packaging>
+    <modules>
+        <module>koh-auth</module>
+    </modules>
 
     <artifactId>spring-cloud-k8s</artifactId>
 
