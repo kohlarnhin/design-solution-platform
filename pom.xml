@@ -13,6 +13,7 @@
         <module>design-patterns</module>
         <module>redis-lock</module>
         <module>spring-cloud-k8s</module>
+        <module>springboot-k8s</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

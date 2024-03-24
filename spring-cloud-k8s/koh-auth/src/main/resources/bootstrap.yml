@@ -5,10 +5,7 @@ spring:
     name: koh-auth
   cloud:
     kubernetes:
-      config:
-        enabled: true
-        name: koh-user-config
-        namespace: koh-cloud
       discovery:
         namespaces: koh-cloud
+
 
