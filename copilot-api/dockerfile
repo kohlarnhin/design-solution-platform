@@ -1,0 +1,12 @@
+# 使用 JDK 21 的官方 Docker 镜像作为基础镜像
+FROM openjdk:21-jdk
+
+# 将当前目录下的 target/myapp.jar 文件复制到 Docker 镜像中的 /usr/src/myapp/myapp.jar
+# 请根据你的项目情况修改 jar 文件的名称和位置
+COPY target/app.jar /app.jar
+
+# 指定 Docker 容器启动时的工作目录
+WORKDIR /app
+
+# 指定 Docker 容器启动时执行的命令
+ENTRYPOINT ["java", "-jar", "myapp.jar"]
