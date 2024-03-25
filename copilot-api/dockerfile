@@ -9,4 +9,4 @@ COPY target/app.jar /app.jar
 WORKDIR /app
 
 # 指定 Docker 容器启动时执行的命令
-ENTRYPOINT ["java", "-jar", "myapp.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
