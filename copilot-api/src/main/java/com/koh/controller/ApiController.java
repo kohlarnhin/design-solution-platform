@@ -1,15 +1,15 @@
 package com.koh.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.koh.service.TokenService;
 import io.micrometer.common.util.StringUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +18,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -28,60 +27,33 @@ public class ApiController {
 
     private final WebClient webClient;
 
+    @Resource
+    private Map<String, TokenService> tokenServiceMap;
+
     @Autowired
     public ApiController(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://api.githubcopilot.com").build();
     }
 
-
-//    @PostMapping("/v1/chat/completions")
-//    public void test() {
-//        System.out.println("111");
-//    }
-
     @PostMapping(value = "/v1/chat/completions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> streamData(@RequestBody Map map) {
-        // 从第三方接口获取数据流
-        Flux<String> dataStream = callThirdPartyApi(map);
-
-        // 返回数据流
-        return dataStream;
+    public Flux<String> streamData(HttpServletRequest request,
+                                   @RequestBody Map map) {
+        String authorization = request.getHeader("Authorization");
+        //通过split进行分组，根据空格，第一位是Bearer抛弃，第二位是渠道，第三位就是凭证
+        String[] split = authorization.split(" ");
+        TokenService tokenService = tokenServiceMap.get(split[1]);
+        String token = tokenService.getToken(split[2]);
+        Flux<String> jsonObjectFlux = fetchDataFromThirdParty(map,token);
+        return jsonObjectFlux
+                .filter(StringUtils::isNotEmpty)
+                .map(json -> json.replaceFirst("data: ", ""));
     }
 
-    public Flux<String> callThirdPartyApi(Map map) {
-        Flux<String> jsonObjectFlux = fetchDataFromThirdParty(map);
-        Flux<String> map1 = jsonObjectFlux.map(json -> {
-            String s = extractContentFromResponse(json);
-            return s;
-        });
-        return map1;
-    }
-
-    private static String extractContentFromResponse(String jsonResponse) {
-        if (StringUtils.isNotEmpty(jsonResponse)) {
-            String replace = jsonResponse.replaceFirst("data: ", "");
-            JSONObject jsonObject = JSON.parseObject(replace);
-            JSONArray choices = jsonObject.getJSONArray("choices");
-            if (!CollectionUtils.isEmpty(choices)) {
-                Long created = jsonObject.getLong("created");
-                String id = jsonObject.getString("id");
-                Map<String, Object> map = new HashMap<>();
-                map.put("id", id);
-                map.put("object", "chat.completion.chunk");
-                map.put("created", created);
-                map.put("model", "gpt-4");
-                map.put("choices", choices);
-                return JSONObject.toJSONString(map);
-            }
-        }
-        return "";
-    }
-
-    public Flux<String> fetchDataFromThirdParty(Map map) {
+    public Flux<String> fetchDataFromThirdParty(Map map, String token) {
         return webClient.post()
                 .uri("/chat/completions")
                 .headers(headers -> {
-                    headers.add("Authorization", "Bearer " + "tid=f57d0f3b622672e64d0318b7faab5709;exp=1711303970;sku=trial_30_monthly_subscriber;st=dotcom;chat=1;8kp=1:651646d3e58aa155a7d4164cd992b1ad367c5acbe92f76cdbc67085727b65b31");
+                    headers.add("Authorization", "Bearer " + token);
                     headers.add("Editor-Version", "vscode/1.86.2");
                 })
                 .contentType(MediaType.APPLICATION_JSON)
