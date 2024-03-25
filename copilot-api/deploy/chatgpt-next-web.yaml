@@ -28,6 +28,13 @@ spec:
           ports:
             - containerPort: 3000
               protocol: TCP
+          env:
+            - name: OPENAI_API_KEY
+              value: "Github ghu_zKVmJAnqWC4sBrPgbL9EyEKQWRFZcR0XSaya"
+            - name: CODE
+              value: "170326"
+            - name: BASE_URL
+              value: "http://copilot-api.copilot.svc.cluster.local"
           resources:
             limits:
               cpu: 300m
@@ -50,6 +57,6 @@ spec:
     app: chatgpt-next-web
   ports:
     - protocol: TCP
-      port: 3000
+      port: 80
       targetPort: 3000
   type: ClusterIP

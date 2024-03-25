@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx  # 替换为你的 IngressClass 名称
+  tls:
+    - hosts:
+        - '*.klarn.fun'
+      secretName: wildcard-certificate
+  rules:
+    - host: "ai.klarn.fun"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: chatgpt-next-web
+                port:
+                  number: 3000
