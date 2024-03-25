@@ -30,7 +30,7 @@ spec:
               protocol: TCP
           env:
             - name: OPENAI_API_KEY
-              value: "Github ghu_zKVmJAnqWC4sBrPgbL9EyEKQWRFZcR0XSaya"
+              value: "TaoBao xxxxxxxxxxx"
             - name: CODE
               value: "170326"
             - name: BASE_URL
