@@ -22,7 +22,7 @@ spec:
         app: chatgpt-next-web
     spec:
       containers:
-        - image: yidadaa/chatgpt-next-web:lastest
+        - image: yidadaa/chatgpt-next-web:latest
           imagePullPolicy: Always
           name: app
           ports:
