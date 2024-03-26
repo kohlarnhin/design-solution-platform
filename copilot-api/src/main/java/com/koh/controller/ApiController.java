@@ -66,7 +66,7 @@ public class ApiController {
     public Flux<String> fetchDataFromThirdParty(Map map, String token) {
         String requestId = generateRequestId();
         String vscodeSessionId = generateVscodeSessionId();
-        logger.info("打印测试常量变量 requestId: {}\n, vscodeSessionId:{}\n, vscodeMachineId:{}\n",
+        logger.info("\n打印测试常量变量\n requestId: {}\n, vscodeSessionId:{}\n, vscodeMachineId:{}\n",
                 requestId,vscodeSessionId,vscodeMachineId);
         return webClient.post()
                 .uri("/chat/completions")
