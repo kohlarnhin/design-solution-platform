@@ -41,6 +41,11 @@ public class GithubTokenServiceImpl implements TokenService {
 
             // 添加Authorization头部
             connection.setRequestProperty("Authorization", "token " + key);
+            connection.setRequestProperty("Host", "api.github.com");
+            connection.setRequestProperty("Authorization", "token " + key);
+            connection.setRequestProperty("Editor-Version", "vscode/1.86.2");
+            connection.setRequestProperty("Editor-Plugin-Version", "copilot/1.171.0");
+            connection.setRequestProperty("User-Agent", "GithubCopilot/1.171.0");
 
             // 获取响应代码
             int responseCode = connection.getResponseCode();
