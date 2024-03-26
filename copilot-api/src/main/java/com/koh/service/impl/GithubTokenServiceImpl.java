@@ -40,7 +40,8 @@ public class GithubTokenServiceImpl implements TokenService {
             connection.setRequestMethod("GET");
 
             // 添加Authorization头部
-            connection.setRequestProperty("Authorization", "token " + key);
+            connection.setRequestProperty("Authorizatio" +
+                    "n", "token " + key);
             connection.setRequestProperty("Host", "api.github.com");
             connection.setRequestProperty("Authorization", "token " + key);
             connection.setRequestProperty("Editor-Version", "vscode/1.86.2");
