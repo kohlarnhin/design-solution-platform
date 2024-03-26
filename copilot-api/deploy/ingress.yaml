@@ -22,7 +22,7 @@ spec:
                 port:
                   number: 3000
 
-    - host: "api.copilot.klarn.fun"
+    - host: "copilot-api.klarn.fun"
       http:
         paths:
           - pathType: Prefix
