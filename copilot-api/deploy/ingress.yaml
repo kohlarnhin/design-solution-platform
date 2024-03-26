@@ -21,3 +21,14 @@ spec:
                 name: chatgpt-next-web
                 port:
                   number: 3000
+
+    - host: "api.copilot.klarn.fun"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: copilot-api
+                port:
+                  number: 80
