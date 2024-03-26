@@ -33,7 +33,7 @@ public class ApiController {
     private final WebClient webClient;
 
     // 初始化 session 相关变量
-    private String vscodeMachineId;
+    private final String vscodeMachineId;
     private long lastSessionIdTime = 0;
     private long updateSessionIdTime;
     private String githubToken;
