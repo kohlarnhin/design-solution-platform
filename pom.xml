@@ -15,6 +15,7 @@
         <module>spring-cloud-k8s</module>
         <module>springboot-k8s</module>
         <module>copilot-api</module>
+        <module>auto-async-log</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
