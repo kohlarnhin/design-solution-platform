@@ -12,6 +12,7 @@
     <modules>
         <module>koh-auth</module>
         <module>koh-user</module>
+        <module>mybatis_generator2024</module>
     </modules>
 
     <artifactId>spring-cloud-k8s</artifactId>
