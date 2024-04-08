@@ -1,5 +1,6 @@
-package com.koh.config;
+package com.koh.log.config;
 
+import com.koh.log.util.ThreadMdcUtil;
 import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 /**
- * 自定义 Spring 线程池，解决子线程丢失 reqest_id 问题
+ * 自定义 Spring 线程池，解决子线程丢失 request_id 问题
  */
 @Component
 public class ThreadPoolExecutorMdcWrapper extends ThreadPoolTaskExecutor {

@@ -1,13 +1,6 @@
 package com.koh.factoryStrategy.config;
 
-import com.koh.factoryStrategy.strategy.AlipayPaymentStrategy;
-import com.koh.factoryStrategy.strategy.PaymentStrategy;
-import com.koh.factoryStrategy.strategy.WechatPaymentStrategy;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class PaymentStrategyConfig {

@@ -1,16 +1,12 @@
 package com.koh.factoryStrategy;
 
 
-import com.koh.factoryStrategy.factory.PaymentFactory;
 import com.koh.factoryStrategy.strategy.PaymentStrategy;
-import com.koh.factoryStrategy.type.PaymentType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
