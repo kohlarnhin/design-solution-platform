@@ -1,0 +1,15 @@
+cos:
+  base:
+    secretid: 自己的secretid
+    secretkey: 自己的secretkey
+    sessiontoken: ""
+    protocol: https
+    mode: ""
+    cvmrolename: ""
+    closeautoswitchhost: ""
+  buckets:
+    - name: 自己的桶名
+      alias: 别名
+      region: 区域
+      endpoint: cos.ap-hongkong.myqcloud.com （区域域名，我这边用的香港的）
+      ofs: false
