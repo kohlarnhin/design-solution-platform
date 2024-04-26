@@ -5,3 +5,6 @@ spring:
     type: caffeine
     caffeine:
       spec: maximumSize=500,expireAfterWrite=1800s
+copilot:
+  ghu: ghu_kkkkkk
+  key: ertjifkdloijkifj

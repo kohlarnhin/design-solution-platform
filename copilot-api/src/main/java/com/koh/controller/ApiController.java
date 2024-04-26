@@ -2,7 +2,9 @@ package com.koh.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.koh.properties.CopilotProperties;
 import com.koh.service.TokenService;
+import com.koh.utils.AesUtils;
 import io.micrometer.common.util.StringUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +27,7 @@ import java.util.UUID;
 @RestController
 public class ApiController {
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
-
-
     private final WebClient webClient;
-
     // 初始化 session 相关变量
     private final String vscodeMachineId;
     private long lastSessionIdTime = 0;
@@ -37,6 +36,10 @@ public class ApiController {
 
     @Resource
     private Map<String, TokenService> tokenServiceMap;
+    @Resource
+    private CopilotProperties copilotProperties;
+    @Resource
+    private AesUtils aesUtils;
 
     @Autowired
     public ApiController(WebClient.Builder webClientBuilder) {
@@ -49,12 +52,14 @@ public class ApiController {
     public Flux<String> streamData(HttpServletRequest request,
                                    @RequestBody Map map) {
         String authorization = request.getHeader("Authorization");
+        //解密
+        authorization = aesUtils.aesDecryptForFront(authorization, copilotProperties.getKey());
         //通过split进行分组，根据空格，第一位是Bearer抛弃，第二位是渠道，第三位就是凭证
         String[] split = authorization.split(" ");
         TokenService tokenService = tokenServiceMap.get(split[1]);
         githubToken = split[2];
         String token = tokenService.getToken(split[2]);
-        Flux<String> jsonObjectFlux = fetchDataFromThirdParty(map,token);
+        Flux<String> jsonObjectFlux = fetchDataFromThirdParty(map, token);
         return jsonObjectFlux
                 .filter(StringUtils::isNotEmpty)
                 .map(json -> json.replaceFirst("data: ", ""));
@@ -64,7 +69,7 @@ public class ApiController {
         String requestId = generateRequestId();
         String vscodeSessionId = generateVscodeSessionId();
         logger.info("\n打印测试常量变量\n requestId: {}\n, vscodeSessionId:{}\n, vscodeMachineId:{}\n",
-                requestId,vscodeSessionId,vscodeMachineId);
+                requestId, vscodeSessionId, vscodeMachineId);
         return webClient.post()
                 .uri("/chat/completions")
                 .headers(headers -> {

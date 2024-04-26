@@ -55,6 +55,11 @@
             <version>1.15</version> <!-- 或者你所需的版本 -->
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
 
     </dependencies>
 
