@@ -57,12 +57,12 @@ public class ApiController {
         //解密
 //        authorization = aesUtils.aesDecryptForFront(authorization, copilotProperties.getKey());
         //通过split进行分组，根据空格，第一位是Bearer抛弃，第二位是渠道，第三位就是凭证
-//        String[] split = authorization.split(" ");
+        String[] split = authorization.split(" ");
 //        TokenService tokenService = tokenServiceMap.get(split[1]);
 //        githubToken = split[2];
 //        String token = tokenService.getToken(split[2]);
         //现在的token直接就是前端传入的即可
-        String token = authorization;
+        String token = split[1];
         Flux<String> jsonObjectFlux = fetchDataFromThirdParty(map, token);
         return jsonObjectFlux
                 .filter(StringUtils::isNotEmpty)
