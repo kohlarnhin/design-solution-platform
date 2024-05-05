@@ -43,7 +43,8 @@ public class ApiController {
 
     @Autowired
     public ApiController(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://api.githubcopilot.com").build();
+//        this.webClient = webClientBuilder.baseUrl("https://api.githubcopilot.com").build();
+        this.webClient = webClientBuilder.baseUrl("https://codex.micosoft.icu").build();
         this.vscodeMachineId = generateVscodeMachineId();
         this.updateSessionIdTime = genSessionIdUpdateTime();
     }
@@ -52,13 +53,16 @@ public class ApiController {
     public Flux<String> streamData(HttpServletRequest request,
                                    @RequestBody Map map) {
         String authorization = request.getHeader("Authorization");
+        // 注释掉以前的代码，现在用新的淘宝的方式
         //解密
-        authorization = aesUtils.aesDecryptForFront(authorization, copilotProperties.getKey());
+//        authorization = aesUtils.aesDecryptForFront(authorization, copilotProperties.getKey());
         //通过split进行分组，根据空格，第一位是Bearer抛弃，第二位是渠道，第三位就是凭证
-        String[] split = authorization.split(" ");
-        TokenService tokenService = tokenServiceMap.get(split[1]);
-        githubToken = split[2];
-        String token = tokenService.getToken(split[2]);
+//        String[] split = authorization.split(" ");
+//        TokenService tokenService = tokenServiceMap.get(split[1]);
+//        githubToken = split[2];
+//        String token = tokenService.getToken(split[2]);
+        //现在的token直接就是前端传入的即可
+        String token = authorization;
         Flux<String> jsonObjectFlux = fetchDataFromThirdParty(map, token);
         return jsonObjectFlux
                 .filter(StringUtils::isNotEmpty)
@@ -73,22 +77,24 @@ public class ApiController {
         return webClient.post()
                 .uri("/chat/completions")
                 .headers(headers -> {
-                    headers.add("Host", "api.githubcopilot.com");
+//                    headers.add("Host", "api.githubcopilot.com");
+                    headers.add("Host", "codex.micosoft.icu");
                     headers.add("X-Request-Id", requestId);
                     headers.add("Vscode-Sessionid", vscodeSessionId);
                     headers.add("Vscode-Machineid", vscodeMachineId);
                     headers.add("X-Github-Api-Version", "2023-07-07");
-                    headers.add("Editor-Version", "vscode/1.86.2");
-                    headers.add("Editor-Plugin-Version", "copilot-chat/0.12.2");
+                    headers.add("Editor-Version", "vscode/1.89.0");
+                    headers.add("Editor-Plugin-Version", "copilot-chat/0.15.0");
                     headers.add("Openai-Organization", "github-copilot");
                     headers.add("Copilot-Integration-Id", "vscode-chat");
                     headers.add("Openai-Intent", "conversation-panel");
                     headers.add("Content-Type", "application/json");
-                    headers.add("User-Agent", "GitHubCopilotChat/0.12.2");
+                    headers.add("User-Agent", "GitHubCopilotChat/0.15.0");
                     headers.add("Accept", "*/*");
                     headers.add("Accept-Encoding", "gzip,deflate,br");
                     headers.add("Connection", "keep-alive");
                     headers.add("Authorization", "Bearer " + token);
+                    headers.add("x-auth-token", token);
                 })
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(JSONObject.toJSONString(map)) // 设置请求体
