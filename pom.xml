@@ -16,6 +16,7 @@
         <module>springboot-k8s</module>
         <module>copilot-api</module>
         <module>auto-async-log</module>
+        <module>common-mqtt</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -34,6 +35,7 @@
         <spring.boot.version>3.2.0</spring.boot.version>
         <spring.cloud.version>2023.0.0</spring.cloud.version>
         <spring.cloud.alibaba.version>2022.0.0.0</spring.cloud.alibaba.version>
+        <client.mqttv3.version>1.2.5</client.mqttv3.version>
     </properties>
 
     <dependencyManagement>
@@ -123,6 +125,12 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring.boot.test.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+                <version>${client.mqttv3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
