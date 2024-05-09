@@ -1,0 +1,87 @@
+{
+  "index_patterns": ["apcp-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "refresh_interval": "1s",
+      "index.max_result_window": 10000,
+      "index.blocks.read_only_allow_delete": null,
+      "analysis": {
+        "analyzer": {
+          "default": {
+            "tokenizer": "standard"
+          }
+        }
+      }
+    },
+    "mappings": {
+      "dynamic": "false",
+      "properties": {
+        "hostname": {
+          "type": "keyword"
+        },
+        "project": {
+          "type": "keyword"
+        },
+        "request_id": {
+          "type": "keyword"
+        },
+        "http_status": {
+          "type": "integer"
+        },
+        "result_code": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "keyword"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "request_ip": {
+          "type": "keyword"
+        },
+        "request_url": {
+          "type": "keyword"
+        },
+        "request_uri": {
+          "type": "keyword"
+        },
+        "request_method": {
+          "type": "keyword"
+        },
+        "content_type": {
+          "type": "keyword"
+        },
+        "request_params": {
+          "type": "keyword"
+        },
+        "request_body": {
+          "type": "keyword"
+        },
+        "message": {
+          "type": "keyword"
+        },
+        "error_msg": {
+          "type": "keyword"
+        },
+        "thread_name": {
+          "type": "keyword"
+        },
+        "request_time": {
+          "format": "strict_date_optional_time||yyyy-MM-dd HH:mm:ss.SSS||epoch_millis",
+          "type": "date"
+        },
+        "cost_time": {
+          "type": "long"
+        },
+        "@timestamp": {
+          "format": "strict_date_optional_time||yyyy-MM-dd HH:mm:ss.SSS||epoch_millis",
+          "type": "date"
+        }
+      }
+    }
+  },
+  "priority": 1
+}

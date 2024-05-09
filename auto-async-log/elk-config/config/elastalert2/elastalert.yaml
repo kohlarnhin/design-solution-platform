@@ -1,0 +1,131 @@
+# 包含规则yaml文件的文件夹路径
+# 也可以是一个文件夹路径列表
+# 任何.yaml文件都将被加载为规则
+rules_folder: /opt/elastalert/rules
+
+# ElastAlert查询Elasticsearch的频率
+# 单位可以是从周到秒的任何时间单位
+run_every:
+  seconds: 10  # 每隔10秒运行一次
+
+# ElastAlert将缓冲最近一段时间的结果
+# 以防某些日志源不是实时的
+buffer_time:
+  minutes: 15  # 缓冲时间为15分钟
+
+# 用于元数据写入的Elasticsearch主机名
+# 注意每个规则可以有自己的Elasticsearch主机
+es_host: elasticsearch
+
+# Elasticsearch端口
+es_port: 9200
+
+# 使用的AWS区域。在使用AWS托管的Elasticsearch时设置此项
+#aws_region: us-east-1
+
+# 使用的AWS配置文件。如果使用aws-cli配置文件，请使用此项。
+# 详细信息请参见http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+#profile: test
+
+# Elasticsearch的可选URL前缀
+#es_url_prefix: elasticsearch
+
+# 用于statsd指标的可选前缀
+#statsd_instance_tag: elastalert
+
+# 可选的statsd主机
+#statsd_host: dogstatsd
+
+# 使用TLS连接到Elasticsearch
+use_ssl: True
+
+# 验证TLS证书
+verify_certs: True
+
+# 显示与TLS或证书相关的警告
+#ssl_show_warn: True
+
+# GET请求与主体是Elasticsearch的默认选项。
+# 如果由于某种原因失败，可以传递'GET'、'POST'或'source'。
+# 详细信息请参见https://elasticsearch-py.readthedocs.io/en/master/connection.html?highlight=send_get_body_as#transport
+#es_send_get_body_as: GET
+
+# 用于Elasticsearch的基本身份验证用户名和密码
+es_username: 
+es_password: 
+
+# 使用客户端证书进行SSL身份验证
+# client_cert必须是一个包含客户端证书和密钥的pem文件
+ca_certs: /opt/elastalert/certs/ca/ca.crt
+client_cert: /opt/elastalert/certs/elasticsearch/elasticsearch.crt
+client_key: /opt/elastalert/certs/elasticsearch/elasticsearch.key
+
+# 用于存储元数据的es_host上的索引
+# 这可以是一个未映射的索引，但建议运行elastalert-create-index来设置映射
+writeback_index: elastalert_status
+
+# 如果警报由于某种原因失败，ElastAlert将重试发送警报
+# 直到经过此时间段为止
+alert_time_limit:
+  days: 2  # 警报时间限制为2天
+
+# 可选的时间戳格式。
+# ElastAlert将使用此格式在警报消息和日志消息中打印时间戳。
+#custom_pretty_ts_format: '%Y-%m-%d %H:%M'
+
+# 自定义日志配置
+# 如果要设置自己的日志配置以将日志记录到文件中
+# 或者到Logstash和/或修改日志级别，请使用
+# 下面的配置并根据需要进行调整。
+# 注意：如果使用--verbose/--debug运行ElastAlert，则“elastalert”记录器的日志级别将更改为INFO，如果不是INFO/DEBUG。
+#logging:
+#  version: 1
+#  incremental: false
+#  disable_existing_loggers: false
+#  formatters:
+#    logline:
+#      format: '%(asctime)s %(levelname)+8s %(name)+20s %(message)s'
+#
+#  handlers:
+#    console:
+#      class: logging.StreamHandler
+#      formatter: logline
+#      level: DEBUG
+#      stream: ext://sys.stderr
+#
+#    file:
+#      class : logging.FileHandler
+#      formatter: logline
+#      level: DEBUG
+#      filename: elastalert.log
+#
+#  loggers:
+#    elastalert:
+#      level: WARN
+#      handlers: []
+#      propagate: true
+#
+#    elasticsearch:
+#      level: WARN
+#      handlers: []
+#      propagate: true
+#
+#    elasticsearch.trace:
+#      level: WARN
+#      handlers: []
+#      propagate: true
+#
+#    '':  # root logger
+#      level: WARN
+#      handlers:
+#        - console
+#        - file
+#      propagate: false
+
+# 邮箱smtp配置
+smtp_host:   # SMTP服务器地址
+smtp_port: 465  # SMTP服务器端口
+smtp_ssl: true  # 是否使用SSL
+email_reply_to: 
+from_addr:   # 你的电子邮件地址
+smtp_auth_file: /opt/elastalert/smtp_auth_file.yaml  # SMTP认证文件

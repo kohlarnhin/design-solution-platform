@@ -1,0 +1,145 @@
+services:
+  elasticsearch:
+    restart: always
+    image: elasticsearch:8.12.2
+    container_name: elasticsearch
+    hostname: elasticsearch
+    privileged: true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    mem_limit: 5g
+    environment:
+      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+      - "http.host=0.0.0.0"
+      - "node.name=elasticsearch"
+      - "cluster.name=es_cluster"
+      - "discovery.type=single-node"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - "$PWD/config/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+      - "$PWD/config/elasticsearch/plugins:/usr/share/elasticsearch/plugins"
+      - "$PWD/config/elasticsearch/config/certs:/usr/share/elasticsearch/config/certs"
+      - "$PWD/data/elasticsearch/data:/usr/share/elasticsearch/data"
+    networks:
+      - elk
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  kibana:
+    restart: always
+    container_name: kibana
+    image: kibana:8.12.2
+    mem_limit: 1g
+    environment:
+      - "NODE_OPTIONS=--max_old_space_size=800"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    ports:
+      - "5601:5601"
+    volumes:
+      - "$PWD/config/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml"
+      - "$PWD/config/elasticsearch/config/certs:/usr/share/kibana/config/certs"
+    networks:
+      - elk
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+#  logstash:
+#    restart: always
+#    image: logstash:8.12.2
+#    container_name: logstash
+#    cpu_shares: 512
+#    mem_limit: 2g
+#    environment:
+#      - "LS_JAVA_OPTS=-Xms1g -Xmx1g"
+#    ports:
+#      - "9600:9600"
+#      - "5044:5044"
+#    volumes:
+#      - "$PWD/config/logstash/config:/usr/share/logstash/config"
+#      - "$PWD/config/logstash/pipeline:/usr/share/logstash/pipeline"
+#      - "$PWD/config/logstash/templates:/usr/share/logstash/templates"
+#      - "$PWD/config/elasticsearch/config/certs:/usr/share/logstash/config/certs"
+#      - "$PWD/data/logstash/data:/usr/share/logstash/data"
+#      - "$PWD/data/logstash/logs:/usr/share/logstash/logs"
+#    networks:
+#      - elk
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
+        
+  metricbeat:
+    restart: always
+    container_name: metricbeat
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    image: docker.elastic.co/beats/metricbeat:8.12.2
+    user: root
+    volumes:
+      - "$PWD/config/elasticsearch/config/certs:/usr/share/metricbeat/certs"
+      - "$PWD/data/metricbeat/data:/usr/share/metricbeat/data"
+      - "$PWD/config/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
+      - "/proc:/hostfs/proc:ro"
+      - "/:/hostfs:ro"
+    environment:
+      - ELASTIC_USER=
+      - ELASTIC_PASSWORD=
+      - ELASTIC_HOSTS=https://elasticsearch:9200
+      - KIBANA_HOSTS=http://kibana:5601
+#      - LOGSTASH_HOSTS=http://logstash:9600
+    networks:
+      - elk
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  elastalert2:
+    restart: always
+    container_name: elastalert2
+    image: jertel/elastalert2:2.17.0
+    volumes:
+      - "$PWD/config/elastalert2/elastalert.yaml:/opt/elastalert/config.yaml"
+      - "$PWD/config/elastalert2/rules:/opt/elastalert/rules"
+      - "$PWD/config/elastalert2/smtp_auth_file.yaml:/opt/elastalert/smtp_auth_file.yaml"
+      - "$PWD/config/elasticsearch/config/certs:/opt/elastalert/certs"
+    networks:
+      - elk
+
+networks:
+  elk:
+

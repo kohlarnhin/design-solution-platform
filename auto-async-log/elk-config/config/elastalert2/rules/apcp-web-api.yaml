@@ -1,0 +1,86 @@
+# 规则名称
+name: apcp-web-api
+# 规则类型为频率
+# any是任意错误会立即发送
+# frequency 在指定时间内如果有一个或更多的事件发生，就会发送一次警报
+type: any
+query_key:
+  - http_status
+# 匹配的索引模式
+index: apcp-web-api-*
+# 是否启用规则
+is_enabled: true
+# 触发警报所需的事件数量 如果类型是any失效
+num_events: 2
+# 规定的时间范围内进行事件计数
+timeframe:
+  minutes: 10
+# 触发警报后重新警报的时间间隔
+realert:
+  minutes: 0
+# 要在警报消息中显示的唯一术语的数量
+terms_size: 50
+# 时间戳字段
+timestamp_field: "@timestamp"
+# 时间戳类型为ISO格式
+timestamp_type: iso
+# 是否使用strftime格式化索引  索引包含日期开启利于查询
+use_strftime_index: true
+# 聚合 一分钟内即使达到次数也会等待聚合后一起发送
+aggregation:
+  minutes: 10
+# 设置聚合键
+aggregation_key:
+  - http_status
+
+# 过滤器
+filter:
+  - query:
+      bool:
+        must:
+          - exists:
+              field: "http_status"
+        must_not:
+          - match:
+              http_status: 200
+          - match:
+              http_status: 401
+          - match:
+              http_status: 302
+
+
+
+
+# 警报主题
+alert_subject: APCP告警-{}
+# 警报主题参数
+alert_subject_args:
+  - project
+
+# 开启只包含警报文本
+alert_text_type: alert_text_only
+
+# 警报正文
+alert_text: |
+  日志时间：{}
+  请求ID：{}
+  请求地址：{}
+  状态码：{}
+  错误信息：{}
+
+
+# 警报正文参数 与上面进行匹配
+alert_text_args:
+  - timestamp
+  - request_id
+  - request_url
+  - http_status
+  - error_msg
+
+# 使用Email进行警报
+alert:
+  - email
+# Email地址
+email:
+  - 
+
