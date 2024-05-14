@@ -22,3 +22,13 @@ spec:
                 name: syncthing-service
                 port:
                   number: 80
+    - host: "trojan.klarn.fun"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: trojan-go
+                port:
+                  number: 80
