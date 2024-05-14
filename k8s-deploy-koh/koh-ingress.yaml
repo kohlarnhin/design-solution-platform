@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: koh-ingress
+  namespace: koh
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx  # 替换为你的 IngressClass 名称
+  tls:
+    - hosts:
+        - '*.klarn.fun'
+      secretName: wildcard-certificate
+  rules:
+    - host: "sync.klarn.fun"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: syncthing-service
+                port:
+                  number: 80
