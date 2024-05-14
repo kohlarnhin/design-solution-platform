@@ -59,7 +59,7 @@ data:
       "remote_addr": "ai.klarn.fun",
       "remote_port": 443,
       "log_level": 1,
-      "log_file": "/path/in/container/log.out",
+      "log_file": "/var/log.out",
       "password": [
         ""
       ],
