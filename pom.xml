@@ -17,6 +17,7 @@
         <module>copilot-api</module>
         <module>auto-async-log</module>
         <module>common-mqtt</module>
+        <module>common-rsa</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
