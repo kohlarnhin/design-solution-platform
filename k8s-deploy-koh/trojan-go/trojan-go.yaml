@@ -61,7 +61,7 @@ data:
       "log_level": 1,
       "log_file": "/var/log.out",
       "password": [
-        ""
+        "password"
       ],
       "ssl": {
         "cert": "/path/in/container/certs/tls.crt",
